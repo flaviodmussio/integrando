@@ -1,31 +1,21 @@
-package com.example.integrando.models;
+package com.example.integrando.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.example.integrando.models.Cliente;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-@Entity
-public class Cliente {
+public class ClienteResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nome;
     private String cpf;
     private LocalDate dataNascimento;
 
-
-    public Cliente() {
-    }
-
-    public Cliente(String nome, String cpf, LocalDate dataNascimento) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
+    public ClienteResponseDTO(Cliente cliente) {
+        this.id = cliente.getId();
+        this.nome = cliente.getNome();
+        this.cpf = cliente.getCpf();
+        this.dataNascimento = cliente.getDataNascimento();
     }
 
     public Long getId() {

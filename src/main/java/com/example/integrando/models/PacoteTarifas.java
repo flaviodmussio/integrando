@@ -64,8 +64,4 @@ public class PacoteTarifas {
         this.valorMaximo = valorMaximo;
     }
 
-    @Override
-    public String toString() {
-        return "PacoteTarifas {" + "id=" + id + ", nome='" + nome + '\'' + ", valorMinimo=" + valorMinimo + ", valorMaximo=" + valorMaximo + '}';
-    }
 }
