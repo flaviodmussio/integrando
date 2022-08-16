@@ -36,7 +36,7 @@ public class ErroHandlerValidation {
         return dto;
     }
 
-    @ResponseStatus(code = HttpStatus.CONFLICT)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CpfValidationException.class)
     public ErroDTO cpfValidationHandle(CpfValidationException exception) {
        return new ErroDTO("cpf", exception.getMessage());

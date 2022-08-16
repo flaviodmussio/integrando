@@ -20,7 +20,7 @@ public class ClienteRequestDTO {
     @NotNull
     @NotEmpty
     @CPF(message = "cpf invalido")
-    @Pattern(regexp = "[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}", message = "data deve estar no formato XXX.XXX.XXX-XX")
+    @Pattern(regexp = "[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}", message = "cpf deve estar no formato XXX.XXX.XXX-XX")
     private String cpf;
 
     @NotNull

@@ -1,52 +1,28 @@
 package com.example.integrando.dto;
 
-import com.example.integrando.models.Cliente;
-
-import java.time.LocalDate;
-
 public class ClienteResponseDTO {
 
-    private Long id;
-    private String nome;
-    private String cpf;
-    private LocalDate dataNascimento;
+    private String status;
+    private ClienteDTO cliente;
 
-    public ClienteResponseDTO(Cliente cliente) {
-        this.id = cliente.getId();
-        this.nome = cliente.getNome();
-        this.cpf = cliente.getCpf();
-        this.dataNascimento = cliente.getDataNascimento();
+    public ClienteResponseDTO(String status, ClienteDTO cliente) {
+        this.status = status;
+        this.cliente = cliente;
     }
 
-    public Long getId() {
-        return id;
+    public String getStatus() {
+        return status;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getNome() {
-        return nome;
+    public ClienteDTO getCliente() {
+        return cliente;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    public void setCliente(ClienteDTO cliente) {
+        this.cliente = cliente;
     }
 }

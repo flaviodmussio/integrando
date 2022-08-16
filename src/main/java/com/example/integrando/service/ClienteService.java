@@ -7,7 +7,6 @@ import com.example.integrando.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -34,27 +33,46 @@ public class ClienteService {
         return todosClientes;
     }
 
-    public Optional<Cliente> salvar(ClienteRequestDTO cliente) {
-        Optional<Cliente> resultado = Optional.empty();
+    public Optional<Cliente> cadastrar(ClienteRequestDTO cliente) {
         Cliente clienteParaSalvar = cliente.toCliente();
 
         if (clienteRepository.findByCpf(clienteParaSalvar.getCpf()).isEmpty()) {
-            resultado = Optional.of(clienteParaSalvar);
-
-            clienteRepository.save(clienteParaSalvar);
+            return this.salvar(clienteParaSalvar);
         } else {
             throw new CpfValidationException("CPF já cadastrado");
+        }
+    }
+
+    public Optional<Cliente> encontrar(Long id) {
+        return clienteRepository.findById(id);
+    }
+
+    public Optional<Cliente> atualizar(Long id, ClienteRequestDTO clienteRequest) {
+        Optional<Cliente> resultado = Optional.empty();
+        Optional<Cliente> clienteParaAtualizar = clienteRepository.findById(id);
+
+        if (clienteParaAtualizar.isPresent()) {
+            Cliente clienteAntigo = clienteParaAtualizar.get();
+            Cliente clienteAtualizado = clienteRequest.toCliente();
+
+            if (clienteAtualizado.getCpf().equals(clienteAntigo.getCpf())){
+                clienteAtualizado.setId(clienteAntigo.getId());
+
+                resultado = this.salvar(clienteAtualizado);
+            } else {
+                throw new CpfValidationException("CPF nao pode ser diferente da previamente cadastrada");
+            }
         }
 
         return resultado;
     }
 
-    public Optional<Cliente> encontrarUm(Long id) {
-        return clienteRepository.findById(id);
-    }
-
     public void removerUm(Long id) {
         clienteRepository.deleteById(id);
+    }
+
+    private Optional<Cliente> salvar(Cliente cliente) {
+        return Optional.of(clienteRepository.save(cliente));
     }
 
 }

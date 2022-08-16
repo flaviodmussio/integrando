@@ -1,8 +1,8 @@
 package com.example.integrando.controller;
 
 import com.example.integrando.dto.ClienteRequestDTO;
+import com.example.integrando.dto.ClienteDTO;
 import com.example.integrando.dto.ClienteResponseDTO;
-import com.example.integrando.dto.ResponseDTO;
 import com.example.integrando.models.Cliente;
 import com.example.integrando.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,24 +38,33 @@ public class ClienteController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<ResponseDTO<ClienteResponseDTO>> cadastrar(@RequestBody @Valid ClienteRequestDTO clientRequest, UriComponentsBuilder uriComponentsBuilder) {
-        Optional<Cliente> cliente = clienteService.salvar(clientRequest);
+    public ResponseEntity<ClienteResponseDTO> cadastrar(@RequestBody @Valid ClienteRequestDTO clientRequest, UriComponentsBuilder uriComponentsBuilder) {
+        Optional<Cliente> cliente = clienteService.cadastrar(clientRequest);
 
         return cliente
                 .map(clienteSalvo -> {
                     URI uri = uriComponentsBuilder.path("/cliente/{id}").buildAndExpand(clienteSalvo.getId()).toUri();
 
-                    return ResponseEntity.created(uri).body(new ResponseDTO<ClienteResponseDTO>("cadastrado", new ClienteResponseDTO(clienteSalvo)));
+                    return ResponseEntity.created(uri).body(new ClienteResponseDTO("cadastrado", new ClienteDTO(clienteSalvo)));
                 })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> detalhar(@PathVariable Long id) {
-        Optional<Cliente> cliente = clienteService.encontrarUm(id);
+    public ResponseEntity<ClienteDTO> detalhar(@PathVariable Long id) {
+        Optional<Cliente> cliente = clienteService.encontrar(id);
 
         return cliente
-                .map(clienteEncontrado -> ResponseEntity.ok().body(new ClienteResponseDTO(clienteEncontrado)))
+                .map(clienteEncontrado -> ResponseEntity.ok().body(new ClienteDTO(clienteEncontrado)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO clienteRequest) {
+        Optional<Cliente> cliente =clienteService.atualizar(id, clienteRequest);
+
+        return cliente
+                .map(clienteAtualizado -> ResponseEntity.ok().body(new ClienteResponseDTO("atualizado", new ClienteDTO(clienteAtualizado))))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
