@@ -5,7 +5,9 @@ import com.example.integrando.dto.ClienteResponseDTO;
 import com.example.integrando.models.Cliente;
 import com.example.integrando.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +30,8 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> listarTodos() {
-        return clienteService.listar();
+    public List<Cliente> listarTodos(String nome, Long id, String cpf) {
+        return clienteService.listar(nome, id, cpf);
     }
 
     @PostMapping
@@ -52,6 +54,14 @@ public class ClienteController {
 
     }
 
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity remover(@PathVariable Long id) {
+
+        clienteService.removerUm(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 }
 
