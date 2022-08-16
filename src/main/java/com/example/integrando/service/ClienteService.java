@@ -1,11 +1,13 @@
 package com.example.integrando.service;
 
 import com.example.integrando.dto.ClienteRequestDTO;
+import com.example.integrando.exception.CpfValidationException;
 import com.example.integrando.models.Cliente;
 import com.example.integrando.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,7 @@ public class ClienteService {
         } else if (id != null) {
             todosClientes = clienteRepository.findAllById(Collections.singleton(id));
         } else if (cpf != null) {
-            todosClientes = clienteRepository.findByCpf(cpf);
+            todosClientes = clienteRepository.findAllByCpf(cpf);
         } else {
             todosClientes = clienteRepository.findAll();
         }
@@ -32,8 +34,19 @@ public class ClienteService {
         return todosClientes;
     }
 
-    public Cliente salvar(ClienteRequestDTO cliente) {
-        return clienteRepository.save(cliente.toCliente());
+    public Optional<Cliente> salvar(ClienteRequestDTO cliente) {
+        Optional<Cliente> resultado = Optional.empty();
+        Cliente clienteParaSalvar = cliente.toCliente();
+
+        if (clienteRepository.findByCpf(clienteParaSalvar.getCpf()).isEmpty()) {
+            resultado = Optional.of(clienteParaSalvar);
+
+            clienteRepository.save(clienteParaSalvar);
+        } else {
+            throw new CpfValidationException("CPF já cadastrado");
+        }
+
+        return resultado;
     }
 
     public Optional<Cliente> encontrarUm(Long id) {

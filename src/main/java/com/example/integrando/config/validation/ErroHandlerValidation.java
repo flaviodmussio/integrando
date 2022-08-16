@@ -1,5 +1,6 @@
 package com.example.integrando.config.validation;
 
+import com.example.integrando.exception.CpfValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -33,6 +34,12 @@ public class ErroHandlerValidation {
         });
 
         return dto;
+    }
+
+    @ResponseStatus(code = HttpStatus.CONFLICT)
+    @ExceptionHandler(CpfValidationException.class)
+    public ErroDTO cpfValidationHandle(CpfValidationException exception) {
+       return new ErroDTO("cpf", exception.getMessage());
     }
 
 }

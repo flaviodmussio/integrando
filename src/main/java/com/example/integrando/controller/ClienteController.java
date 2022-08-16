@@ -2,6 +2,7 @@ package com.example.integrando.controller;
 
 import com.example.integrando.dto.ClienteRequestDTO;
 import com.example.integrando.dto.ClienteResponseDTO;
+import com.example.integrando.dto.ResponseDTO;
 import com.example.integrando.models.Cliente;
 import com.example.integrando.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +37,16 @@ public class ClienteController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<ClienteResponseDTO> cadastrar(@RequestBody @Valid ClienteRequestDTO clientRequest, UriComponentsBuilder uriComponentsBuilder) {
-        Cliente cliente = clienteService.salvar(clientRequest);
+    public ResponseEntity<ResponseDTO<ClienteResponseDTO>> cadastrar(@RequestBody @Valid ClienteRequestDTO clientRequest, UriComponentsBuilder uriComponentsBuilder) {
+        Optional<Cliente> cliente = clienteService.salvar(clientRequest);
 
-        URI uri = uriComponentsBuilder.path("/cliente/{id}").buildAndExpand(cliente.getId()).toUri();
+        return cliente
+                .map(clienteSalvo -> {
+                    URI uri = uriComponentsBuilder.path("/cliente/{id}").buildAndExpand(clienteSalvo.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new ClienteResponseDTO(cliente));
+                    return ResponseEntity.created(uri).body(new ResponseDTO<ClienteResponseDTO>("cadastrado", new ClienteResponseDTO(clienteSalvo)));
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
     @GetMapping("/{id}")
@@ -51,7 +56,6 @@ public class ClienteController {
         return cliente
                 .map(clienteEncontrado -> ResponseEntity.ok().body(new ClienteResponseDTO(clienteEncontrado)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 
     @DeleteMapping("/{id}")
@@ -64,4 +68,3 @@ public class ClienteController {
     }
 
 }
-
