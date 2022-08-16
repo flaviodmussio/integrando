@@ -1,1 +1,1 @@
-INSERT INTO Cliente (nome, cpf, data_nascimento) VALUES ('Sheldon', '19835409005', '2000-08-15');
+INSERT INTO Cliente (nome, cpf, data_nascimento) VALUES ('Sheldon', '198.354.090-05', '2000-08-15');
