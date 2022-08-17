@@ -74,7 +74,7 @@ public class ClienteController {
 
         clienteService.removerUm(id);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
 }

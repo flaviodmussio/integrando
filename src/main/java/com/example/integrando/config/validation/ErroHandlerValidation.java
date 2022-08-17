@@ -22,7 +22,7 @@ public class ErroHandlerValidation {
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public List<ErroDTO> handle(MethodArgumentNotValidException exception) {
+    public List<ErroDTO> argumentNotValidHandle(MethodArgumentNotValidException exception) {
         List<ErroDTO> dto = new ArrayList<>();
 
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
