@@ -1,12 +1,12 @@
 package com.example.integrando.controller;
 
+import com.example.integrando.dto.ClienteListDTO;
 import com.example.integrando.dto.ClienteRequestDTO;
 import com.example.integrando.dto.ClienteDTO;
 import com.example.integrando.dto.ClienteResponseDTO;
 import com.example.integrando.models.Cliente;
 import com.example.integrando.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cliente")
@@ -32,8 +33,12 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> listarTodos(String nome, Long id, String cpf) {
-        return clienteService.listar(nome, id, cpf);
+    public List<ClienteDTO> listarTodos(String nome, Long id, String cpf) {
+        List<Cliente> clientes = clienteService.listar(nome, id, cpf);
+
+        return clientes.stream()
+                .map(ClienteListDTO::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping

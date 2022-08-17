@@ -1,5 +1,7 @@
 package com.example.integrando.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +22,7 @@ public class Cliente {
     private LocalDate dataNascimento;
 
     @ManyToOne
-    @JoinColumn(name = "pacote_tarifas_id", nullable = false)
+    @JoinColumn(nullable = false)
     private PacoteTarifas pacoteTarifas;
 
     public Cliente() {
@@ -63,6 +65,7 @@ public class Cliente {
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
+
 
     public PacoteTarifas getPacoteTarifas() {
         return pacoteTarifas;

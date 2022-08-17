@@ -28,13 +28,17 @@ public class ClienteRequestDTO {
     @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "data deve estar no formato dd/MM/aaaa")
     private String dataNascimento;
 
+    @NotNull
+    @NotEmpty
+    private String pacoteTarifasId;
 
-    public ClienteRequestDTO(String nome, String cpf, String dataNascimento) {
+
+    public ClienteRequestDTO(String nome, String cpf, String dataNascimento, String pacoteTarifasId) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
+        this.pacoteTarifasId = pacoteTarifasId;
     }
-
 
     public static DateTimeFormatter getOfPattern() {
         return ofPattern;
@@ -66,6 +70,14 @@ public class ClienteRequestDTO {
 
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public String getPacoteTarifasId() {
+        return pacoteTarifasId;
+    }
+
+    public void setPacoteTarifasId(String pacoteTarifasId) {
+        this.pacoteTarifasId = pacoteTarifasId;
     }
 
     public Cliente toCliente() {

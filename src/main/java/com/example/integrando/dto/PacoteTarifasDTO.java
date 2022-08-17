@@ -1,5 +1,7 @@
 package com.example.integrando.dto;
 
+import com.example.integrando.models.PacoteTarifas;
+
 import java.math.BigDecimal;
 
 public class PacoteTarifasDTO {
@@ -8,14 +10,12 @@ public class PacoteTarifasDTO {
     private String nome;
     private BigDecimal valorMinimo;
     private BigDecimal valorMaximo;
-    private ClienteDTO clienteDTO;
 
-    public PacoteTarifasDTO(Long id, String nome, BigDecimal valorMinimo, BigDecimal valorMaximo, ClienteDTO clienteDTO) {
-        this.id = id;
-        this.nome = nome;
-        this.valorMinimo = valorMinimo;
-        this.valorMaximo = valorMaximo;
-        this.clienteDTO = clienteDTO;
+    public PacoteTarifasDTO(PacoteTarifas pacoteTarifas) {
+        this.id = pacoteTarifas.getId();
+        this.nome = pacoteTarifas.getNome();
+        this.valorMinimo = pacoteTarifas.getValorMinimo();
+        this.valorMaximo = pacoteTarifas.getValorMaximo();
     }
 
     public Long getId() {
@@ -48,13 +48,5 @@ public class PacoteTarifasDTO {
 
     public void setValorMaximo(BigDecimal valorMaximo) {
         this.valorMaximo = valorMaximo;
-    }
-
-    public ClienteDTO getClienteDTO() {
-        return clienteDTO;
-    }
-
-    public void setClienteDTO(ClienteDTO clienteDTO) {
-        this.clienteDTO = clienteDTO;
     }
 }

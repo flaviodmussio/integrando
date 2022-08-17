@@ -1,11 +1,14 @@
 package com.example.integrando.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,16 +23,8 @@ public class PacoteTarifas {
     private BigDecimal valorMaximo;
 
     @OneToMany(mappedBy = "pacoteTarifas")
-    private List<Cliente> cliente;
+    private List<Cliente> clientes = new ArrayList<>();
 
-    public PacoteTarifas() {
-    }
-
-    public PacoteTarifas(String nome, BigDecimal valorMinimo, BigDecimal valorMaximo) {
-        this.nome = nome;
-        this.valorMinimo = valorMinimo;
-        this.valorMaximo = valorMaximo;
-    }
 
     public Long getId() {
         return id;
@@ -61,6 +56,14 @@ public class PacoteTarifas {
 
     public void setValorMaximo(BigDecimal valorMaximo) {
         this.valorMaximo = valorMaximo;
+    }
+
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
 }

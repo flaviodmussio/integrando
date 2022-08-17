@@ -3,7 +3,9 @@ package com.example.integrando.service;
 import com.example.integrando.dto.ClienteRequestDTO;
 import com.example.integrando.exception.CpfValidationException;
 import com.example.integrando.models.Cliente;
+import com.example.integrando.models.PacoteTarifas;
 import com.example.integrando.repository.ClienteRepository;
+import com.example.integrando.repository.PacoteTarifasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private PacoteTarifasRepository pacoteTarifasRepository;
 
     public List<Cliente> listar(String nome, Long id, String cpf) {
         List<Cliente> todosClientes = null;
@@ -37,6 +42,10 @@ public class ClienteService {
         Cliente clienteParaSalvar = cliente.toCliente();
 
         if (clienteRepository.findByCpf(clienteParaSalvar.getCpf()).isEmpty()) {
+            PacoteTarifas pacoteTarifas = pegarPacoteTarifas(cliente.getPacoteTarifasId());
+
+            clienteParaSalvar.setPacoteTarifas(pacoteTarifas);
+
             return this.salvar(clienteParaSalvar);
         } else {
             throw new CpfValidationException("CPF já cadastrado");
@@ -57,6 +66,7 @@ public class ClienteService {
 
             if (clienteAtualizado.getCpf().equals(clienteAntigo.getCpf())){
                 clienteAtualizado.setId(clienteAntigo.getId());
+                clienteAtualizado.setPacoteTarifas(pegarPacoteTarifas(clienteRequest.getPacoteTarifasId()));
 
                 resultado = this.salvar(clienteAtualizado);
             } else {
@@ -73,6 +83,10 @@ public class ClienteService {
 
     private Optional<Cliente> salvar(Cliente cliente) {
         return Optional.of(clienteRepository.save(cliente));
+    }
+
+    private PacoteTarifas pegarPacoteTarifas(String pacoteTarifaId) {
+        return pacoteTarifasRepository.findById(Long.parseLong(pacoteTarifaId)).get();
     }
 
 }
