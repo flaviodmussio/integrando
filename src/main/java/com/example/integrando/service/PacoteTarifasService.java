@@ -1,6 +1,8 @@
 package com.example.integrando.service;
 
+import com.example.integrando.dto.PacoteTarifasDTO;
 import com.example.integrando.dto.PacoteTarifasRequestDTO;
+import com.example.integrando.exception.PacoteTarifasException;
 import com.example.integrando.exception.PacoteTarifasRemoveException;
 import com.example.integrando.models.Cliente;
 import com.example.integrando.models.PacoteTarifas;
@@ -44,6 +46,23 @@ public class PacoteTarifasService {
         return this.salvar(pacoteTarifas);
     }
 
+    public Optional<PacoteTarifas> atualizar(Long id, PacoteTarifasRequestDTO pacoteTarifasRequest) throws PacoteTarifasException {
+        Optional<PacoteTarifas> pacoteTarifasParaAtualizar = pacoteTarifasRepository.findById(id);
+
+        if (pacoteTarifasParaAtualizar.isPresent()) {
+            PacoteTarifas pacoteTarifasAntigo = pacoteTarifasParaAtualizar.get();
+            PacoteTarifas pacoteTarifasNovo = pacoteTarifasRequest.toPacoteTarifas();
+
+            pacoteTarifasNovo.setId(pacoteTarifasAntigo.getId());
+            pacoteTarifasNovo.setClientes(pacoteTarifasAntigo.getClientes());
+
+            return this.salvar(pacoteTarifasNovo);
+        } else {
+            throw new PacoteTarifasException("Pacote de Tarifas para atualizar nao encontrado");
+        }
+
+    }
+
     public void remover(Long id) throws PacoteTarifasRemoveException {
         if(pacoteTarifasRepository.findById(id).get().getClientes().isEmpty()){
             pacoteTarifasRepository.deleteById(id);
@@ -51,8 +70,6 @@ public class PacoteTarifasService {
             throw new PacoteTarifasRemoveException("Nao foi possivel remover porque clientes possuem esse pacote de tarifas");
         }
     }
-
-
 
     private Optional<PacoteTarifas> salvar(PacoteTarifas pacoteTarifas) {
         return Optional.of(pacoteTarifasRepository.save(pacoteTarifas));

@@ -1,5 +1,6 @@
 package com.example.integrando.config.validation;
 
+import com.example.integrando.exception.ClienteException;
 import com.example.integrando.exception.CpfValidationException;
 import com.example.integrando.exception.PacoteTarifasRemoveException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +39,15 @@ public class ErroHandlerValidation {
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ClienteException.class)
+    public ErroDTO clienteHandle(ClienteException clienteException) {
+        return new ErroDTO(clienteException.getMessage());
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CpfValidationException.class)
     public ErroFormularioDTO cpfValidationHandle(CpfValidationException exception) {
-       return new ErroFormularioDTO("cpf", exception.getMessage());
+        return new ErroFormularioDTO("cpf", exception.getMessage());
     }
 
     @ExceptionHandler(PacoteTarifasRemoveException.class)

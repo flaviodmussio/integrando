@@ -1,6 +1,7 @@
 package com.example.integrando.service;
 
 import com.example.integrando.dto.ClienteRequestDTO;
+import com.example.integrando.exception.ClienteException;
 import com.example.integrando.exception.CpfValidationException;
 import com.example.integrando.models.Cliente;
 import com.example.integrando.models.PacoteTarifas;
@@ -56,8 +57,7 @@ public class ClienteService {
         return clienteRepository.findById(id);
     }
 
-    public Optional<Cliente> atualizar(Long id, ClienteRequestDTO clienteRequest) {
-        Optional<Cliente> resultado = Optional.empty();
+    public Optional<Cliente> atualizar(Long id, ClienteRequestDTO clienteRequest) throws CpfValidationException, ClienteException {
         Optional<Cliente> clienteParaAtualizar = clienteRepository.findById(id);
 
         if (clienteParaAtualizar.isPresent()) {
@@ -68,13 +68,13 @@ public class ClienteService {
                 clienteAtualizado.setId(clienteAntigo.getId());
                 clienteAtualizado.setPacoteTarifas(pegarPacoteTarifas(clienteRequest.getPacoteTarifasId()));
 
-                resultado = this.salvar(clienteAtualizado);
+                return this.salvar(clienteAtualizado);
             } else {
                 throw new CpfValidationException("CPF nao pode ser diferente da previamente cadastrada");
             }
+        } else {
+            throw new ClienteException("Cliente para atualizar nao encontrado!");
         }
-
-        return resultado;
     }
 
     public void remover(Long id) {
