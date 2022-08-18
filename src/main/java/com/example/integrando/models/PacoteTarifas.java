@@ -25,6 +25,14 @@ public class PacoteTarifas {
     @OneToMany(mappedBy = "pacoteTarifas")
     private List<Cliente> clientes = new ArrayList<>();
 
+    public PacoteTarifas() {
+    }
+
+    public PacoteTarifas(String nome, BigDecimal valorMinimo, BigDecimal valorMaximo) {
+        this.nome = nome;
+        this.valorMinimo = valorMinimo;
+        this.valorMaximo = valorMaximo;
+    }
 
     public Long getId() {
         return id;

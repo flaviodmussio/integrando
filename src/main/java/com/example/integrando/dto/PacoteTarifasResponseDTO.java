@@ -1,22 +1,12 @@
 package com.example.integrando.dto;
 
-public class PacoteTarifasResponseDTO {
-
-    private String status;
+public class PacoteTarifasResponseDTO extends ResponseDTO{
 
     private PacoteTarifasDTO pacoteTarifas;
 
     public PacoteTarifasResponseDTO(String status, PacoteTarifasDTO pacoteTarifas) {
-        this.status = status;
+        super(status);
         this.pacoteTarifas = pacoteTarifas;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public PacoteTarifasDTO getPacoteTarifas() {

@@ -1,5 +1,6 @@
 package com.example.integrando.service;
 
+import com.example.integrando.dto.PacoteTarifasRequestDTO;
 import com.example.integrando.models.PacoteTarifas;
 import com.example.integrando.repository.ClienteRepository;
 import com.example.integrando.repository.PacoteTarifasRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PacoteTarifasService {
@@ -32,5 +34,15 @@ public class PacoteTarifasService {
         }
 
         return pacoteTarifas;
+    }
+
+    public Optional<PacoteTarifas> cadastrar(PacoteTarifasRequestDTO pacoteTarifasRequest) {
+        PacoteTarifas pacoteTarifas = pacoteTarifasRequest.toPacoteTarifas();
+
+        return this.salvar(pacoteTarifas);
+    }
+
+    private Optional<PacoteTarifas> salvar(PacoteTarifas pacoteTarifas) {
+        return Optional.of(pacoteTarifasRepository.save(pacoteTarifas));
     }
 }

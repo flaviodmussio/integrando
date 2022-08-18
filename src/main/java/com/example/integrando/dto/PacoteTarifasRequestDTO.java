@@ -1,7 +1,10 @@
 package com.example.integrando.dto;
 
+import com.example.integrando.models.PacoteTarifas;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class PacoteTarifasRequestDTO {
 
@@ -17,15 +20,11 @@ public class PacoteTarifasRequestDTO {
     @NotEmpty
     private String valorMaximo;
 
-    @NotNull
-    @NotEmpty
-    private PacoteTarifasClienteRequestDTO cliente;
 
-    public PacoteTarifasRequestDTO(String nome, String valorMinimo, String valorMaximo, PacoteTarifasClienteRequestDTO cliente) {
+    public PacoteTarifasRequestDTO(String nome, String valorMinimo, String valorMaximo) {
         this.nome = nome;
         this.valorMinimo = valorMinimo;
         this.valorMaximo = valorMaximo;
-        this.cliente = cliente;
     }
 
     public String getNome() {
@@ -52,11 +51,8 @@ public class PacoteTarifasRequestDTO {
         this.valorMaximo = valorMaximo;
     }
 
-    public PacoteTarifasClienteRequestDTO getCliente() {
-        return cliente;
+    public PacoteTarifas toPacoteTarifas() {
+        return new PacoteTarifas(this.nome, new BigDecimal(valorMinimo), new BigDecimal(valorMaximo));
     }
 
-    public void setCliente(PacoteTarifasClienteRequestDTO cliente) {
-        this.cliente = cliente;
-    }
 }
