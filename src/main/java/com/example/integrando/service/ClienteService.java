@@ -77,7 +77,7 @@ public class ClienteService {
         return resultado;
     }
 
-    public void removerUm(Long id) {
+    public void remover(Long id) {
         clienteRepository.deleteById(id);
     }
 

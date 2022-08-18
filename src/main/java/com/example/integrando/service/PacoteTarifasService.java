@@ -1,6 +1,8 @@
 package com.example.integrando.service;
 
 import com.example.integrando.dto.PacoteTarifasRequestDTO;
+import com.example.integrando.exception.PacoteTarifasRemoveException;
+import com.example.integrando.models.Cliente;
 import com.example.integrando.models.PacoteTarifas;
 import com.example.integrando.repository.ClienteRepository;
 import com.example.integrando.repository.PacoteTarifasRepository;
@@ -42,7 +44,21 @@ public class PacoteTarifasService {
         return this.salvar(pacoteTarifas);
     }
 
+    public void remover(Long id) throws PacoteTarifasRemoveException {
+        if(pacoteTarifasRepository.findById(id).get().getClientes().isEmpty()){
+            pacoteTarifasRepository.deleteById(id);
+        } else {
+            throw new PacoteTarifasRemoveException("Nao foi possivel remover porque clientes possuem esse pacote de tarifas");
+        }
+    }
+
+
+
     private Optional<PacoteTarifas> salvar(PacoteTarifas pacoteTarifas) {
         return Optional.of(pacoteTarifasRepository.save(pacoteTarifas));
+    }
+
+    private Cliente pegarCliente(Long id) {
+        return clienteRepository.findById(id).get();
     }
 }

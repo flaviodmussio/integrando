@@ -2,19 +2,17 @@ package com.example.integrando.config.validation;
 
 public class ErroDTO {
 
-    private String campo;
     private String erro;
 
-    public ErroDTO(String campo, String erro) {
-        this.campo = campo;
+    public ErroDTO(String erro) {
         this.erro = erro;
-    }
-
-    public String getCampo() {
-        return campo;
     }
 
     public String getErro() {
         return erro;
+    }
+
+    public void setErro(String erro) {
+        this.erro = erro;
     }
 }

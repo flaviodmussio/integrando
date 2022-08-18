@@ -1,6 +1,7 @@
 package com.example.integrando.config.validation;
 
 import com.example.integrando.exception.CpfValidationException;
+import com.example.integrando.exception.PacoteTarifasRemoveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -22,13 +23,13 @@ public class ErroHandlerValidation {
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public List<ErroDTO> argumentNotValidHandle(MethodArgumentNotValidException exception) {
-        List<ErroDTO> dto = new ArrayList<>();
+    public List<ErroFormularioDTO> argumentNotValidHandle(MethodArgumentNotValidException exception) {
+        List<ErroFormularioDTO> dto = new ArrayList<>();
 
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
         fieldErrors.forEach( e-> {
             String mensagem = messageSource.getMessage(e, LocaleContextHolder.getLocale());
-            ErroDTO erro = new ErroDTO(e.getField(), mensagem);
+            ErroFormularioDTO erro = new ErroFormularioDTO(e.getField(), mensagem);
 
             dto.add(erro);
         });
@@ -38,8 +39,13 @@ public class ErroHandlerValidation {
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CpfValidationException.class)
-    public ErroDTO cpfValidationHandle(CpfValidationException exception) {
-       return new ErroDTO("cpf", exception.getMessage());
+    public ErroFormularioDTO cpfValidationHandle(CpfValidationException exception) {
+       return new ErroFormularioDTO("cpf", exception.getMessage());
+    }
+
+    @ExceptionHandler(PacoteTarifasRemoveException.class)
+    public ErroDTO pacoteTarifasRemocaoHandle(PacoteTarifasRemoveException pacoteTarifasRemoveException) {
+        return new ErroDTO(pacoteTarifasRemoveException.getMessage());
     }
 
 }

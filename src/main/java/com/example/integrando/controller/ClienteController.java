@@ -75,9 +75,9 @@ public class ClienteController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity remover(@PathVariable Long id) {
+    public ResponseEntity<Object> remover(@PathVariable Long id) {
 
-        clienteService.removerUm(id);
+        clienteService.remover(id);
 
         return ResponseEntity.noContent().build();
     }
