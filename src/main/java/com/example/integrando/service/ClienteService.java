@@ -78,7 +78,11 @@ public class ClienteService {
     }
 
     public void remover(Long id) {
-        clienteRepository.deleteById(id);
+        if (clienteRepository.findById(id).isPresent()) {
+            clienteRepository.deleteById(id);
+        } else {
+            throw new ClienteException("Nao foi possivel encontrar cliente com id " + id);
+        }
     }
 
     private Optional<Cliente> salvar(Cliente cliente) {
