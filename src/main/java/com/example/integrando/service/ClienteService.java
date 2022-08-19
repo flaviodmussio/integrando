@@ -3,6 +3,7 @@ package com.example.integrando.service;
 import com.example.integrando.dto.ClienteRequestDTO;
 import com.example.integrando.exception.ClienteException;
 import com.example.integrando.exception.CpfValidationException;
+import com.example.integrando.exception.PacoteTarifasException;
 import com.example.integrando.models.Cliente;
 import com.example.integrando.models.PacoteTarifas;
 import com.example.integrando.repository.ClienteRepository;
@@ -10,6 +11,7 @@ import com.example.integrando.repository.PacoteTarifasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,7 @@ public class ClienteService {
     @Autowired
     private PacoteTarifasRepository pacoteTarifasRepository;
 
-    public List<Cliente> listar(String nome, Long id, String cpf) {
+    public List<Cliente> listar(String nome, Long id, String cpf) throws ClienteException {
         List<Cliente> todosClientes = null;
 
         if (nome != null) {
@@ -34,6 +36,10 @@ public class ClienteService {
             todosClientes = clienteRepository.findAllByCpf(cpf);
         } else {
             todosClientes = clienteRepository.findAll();
+        }
+
+        if (todosClientes.isEmpty()) {
+            throw new ClienteException("Nao foi possivel encontrar clientes com o filtro desejado");
         }
 
         return todosClientes;
@@ -77,7 +83,7 @@ public class ClienteService {
         }
     }
 
-    public void remover(Long id) {
+    public void remover(Long id) throws ClienteException {
         if (clienteRepository.findById(id).isPresent()) {
             clienteRepository.deleteById(id);
         } else {
@@ -90,7 +96,13 @@ public class ClienteService {
     }
 
     private PacoteTarifas pegarPacoteTarifas(String pacoteTarifaId) {
-        return pacoteTarifasRepository.findById(Long.parseLong(pacoteTarifaId)).get();
+        Optional<PacoteTarifas> pacoteTarifas = pacoteTarifasRepository.findById(Long.parseLong(pacoteTarifaId));
+
+        if (pacoteTarifas.isPresent()) {
+            return pacoteTarifas.get();
+        } else {
+            throw new PacoteTarifasException("Nao foi possivel encontrar pacote de tarifas com id " + pacoteTarifaId);
+        }
     }
 
 }

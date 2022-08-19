@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -36,7 +37,7 @@ public class PacoteTarifasController {
 
 
     @GetMapping
-    public List<PacoteTarifasListDTO> listarTodos(Long id, Long clienteId, String clienteNome) {
+    public List<PacoteTarifasListDTO> listarTodos(@RequestParam(required = false) Long id, @RequestParam(required = false) Long clienteId, @RequestParam(required = false) String clienteNome) {
         List<PacoteTarifas> pacotesTarifas = pacoteTarifasService.listar(id, clienteId, clienteNome);
 
         return pacotesTarifas.stream()
@@ -58,6 +59,14 @@ public class PacoteTarifasController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PacoteTarifasDTO> datalhar(@PathVariable Long id) {
+        return pacoteTarifasService.encontrar(id)
+                .map(pacotetarifa -> ResponseEntity.ok().body(new PacoteTarifasDTO(pacotetarifa)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+
+    }
+
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<PacoteTarifasResponseDTO> atualizar(@PathVariable Long id, @RequestBody @Valid PacoteTarifasRequestDTO pacoteTarifasRequest) {
@@ -65,7 +74,7 @@ public class PacoteTarifasController {
 
         return pacoteTarifa
                 .map(pacoteTarifasAtualizado -> ResponseEntity.ok().body(new PacoteTarifasResponseDTO("atualizado", new PacoteTarifasDTO(pacoteTarifasAtualizado))))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

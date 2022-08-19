@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,7 +34,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public List<ClienteDTO> listarTodos(String nome, Long id, String cpf) {
+    public List<ClienteListDTO> listarTodos(@RequestParam(required = false) String nome, @RequestParam(required = false) Long id, @RequestParam(required = false) String cpf) {
         List<Cliente> clientes = clienteService.listar(nome, id, cpf);
 
         return clientes.stream()
@@ -57,9 +58,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> detalhar(@PathVariable Long id) {
-        Optional<Cliente> cliente = clienteService.encontrar(id);
-
-        return cliente
+        return clienteService.encontrar(id)
                 .map(clienteEncontrado -> ResponseEntity.ok().body(new ClienteDTO(clienteEncontrado)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

@@ -14,3 +14,7 @@ spring:
   h2:
     console.enabled: true
     console.path: /h2-console
+
+springdoc:
+  swager-ui:
+    path: /swagger-ui.html

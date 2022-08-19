@@ -45,6 +45,16 @@ public class PacoteTarifasService {
         return this.salvar(pacoteTarifas);
     }
 
+    public Optional<PacoteTarifas> encontrar(Long id) {
+        Optional<PacoteTarifas> pacoteTarifas = pacoteTarifasRepository.findById(id);
+
+        if (pacoteTarifas.isPresent()) {
+            return pacoteTarifas;
+        } else {
+            throw new PacoteTarifasException("Nao foi possivel encontrar o pacote de tarifas com " + id);
+        }
+    }
+
     public Optional<PacoteTarifas> atualizar(Long id, PacoteTarifasRequestDTO pacoteTarifasRequest) throws PacoteTarifasException {
         Optional<PacoteTarifas> pacoteTarifasParaAtualizar = pacoteTarifasRepository.findById(id);
 
