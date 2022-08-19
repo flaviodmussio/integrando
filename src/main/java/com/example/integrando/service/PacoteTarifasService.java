@@ -1,6 +1,7 @@
 package com.example.integrando.service;
 
 import com.example.integrando.dto.PacoteTarifasRequestDTO;
+import com.example.integrando.dto.PacoteTarifasResponseDTO;
 import com.example.integrando.exception.PacoteTarifasException;
 import com.example.integrando.exception.PacoteTarifasRemoveException;
 import com.example.integrando.models.Cliente;
@@ -17,11 +18,15 @@ import java.util.Optional;
 @Service
 public class PacoteTarifasService {
 
-    @Autowired
     private PacoteTarifasRepository pacoteTarifasRepository;
 
-    @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    public PacoteTarifasService(PacoteTarifasRepository pacoteTarifasRepository, ClienteRepository clienteRepository) {
+        this.pacoteTarifasRepository = pacoteTarifasRepository;
+        this.clienteRepository = clienteRepository;
+    }
 
     public List<PacoteTarifas> listar(Long id, Long clienteId, String clienteNome) {
         List<PacoteTarifas> pacoteTarifas = null;
@@ -86,9 +91,5 @@ public class PacoteTarifasService {
 
     private Optional<PacoteTarifas> salvar(PacoteTarifas pacoteTarifas) {
         return Optional.of(pacoteTarifasRepository.save(pacoteTarifas));
-    }
-
-    private Cliente pegarCliente(Long id) {
-        return clienteRepository.findById(id).get();
     }
 }
