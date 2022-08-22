@@ -1,8 +1,10 @@
 package com.example.integrando.util.builder;
 
+import com.example.integrando.models.Cliente;
 import com.example.integrando.models.PacoteTarifas;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class PacoteTarifasBuilder {
 
@@ -13,6 +15,8 @@ public class PacoteTarifasBuilder {
     private BigDecimal valorMinimo;
 
     private BigDecimal valorMaximo;
+
+    private List<Cliente> clientes;
 
     public PacoteTarifasBuilder comId(Long id) {
         this.id = id;
@@ -39,7 +43,11 @@ public class PacoteTarifasBuilder {
     }
 
     public PacoteTarifas criar() {
-        return new PacoteTarifas(nome, valorMinimo, valorMaximo);
+        return new PacoteTarifas(id, nome, valorMinimo, valorMaximo);
+    }
+
+    public PacoteTarifas criar(List<Cliente> clientes) {
+        return new PacoteTarifas(id, nome, valorMinimo, valorMaximo, clientes);
     }
 
 }

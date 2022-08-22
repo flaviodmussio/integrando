@@ -1,10 +1,8 @@
 package com.example.integrando.service;
 
 import com.example.integrando.dto.PacoteTarifasRequestDTO;
-import com.example.integrando.dto.PacoteTarifasResponseDTO;
 import com.example.integrando.exception.PacoteTarifasException;
 import com.example.integrando.exception.PacoteTarifasRemoveException;
-import com.example.integrando.models.Cliente;
 import com.example.integrando.models.PacoteTarifas;
 import com.example.integrando.repository.ClienteRepository;
 import com.example.integrando.repository.PacoteTarifasRepository;
@@ -18,14 +16,13 @@ import java.util.Optional;
 @Service
 public class PacoteTarifasService {
 
-    private PacoteTarifasRepository pacoteTarifasRepository;
+    private final PacoteTarifasRepository pacoteTarifasRepository;
 
     private ClienteRepository clienteRepository;
 
     @Autowired
-    public PacoteTarifasService(PacoteTarifasRepository pacoteTarifasRepository, ClienteRepository clienteRepository) {
+    public PacoteTarifasService(PacoteTarifasRepository pacoteTarifasRepository) {
         this.pacoteTarifasRepository = pacoteTarifasRepository;
-        this.clienteRepository = clienteRepository;
     }
 
     public List<PacoteTarifas> listar(Long id, Long clienteId, String clienteNome) {
@@ -56,7 +53,7 @@ public class PacoteTarifasService {
         if (pacoteTarifas.isPresent()) {
             return pacoteTarifas;
         } else {
-            throw new PacoteTarifasException("Nao foi possivel encontrar o pacote de tarifas com " + id);
+            throw new PacoteTarifasException("Nao foi possivel encontrar o pacote de tarifas com id " + id);
         }
     }
 
@@ -85,7 +82,7 @@ public class PacoteTarifasService {
                 throw new PacoteTarifasRemoveException("Nao foi possivel remover porque clientes possuem esse pacote de tarifas");
             }
         } else {
-            throw new PacoteTarifasRemoveException("Nao foi possivel encontrar o pacote de tarifas com " + id);
+            throw new PacoteTarifasRemoveException("Nao foi possivel encontrar o pacote de tarifas com id " + id);
         }
     }
 
