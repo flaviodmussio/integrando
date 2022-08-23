@@ -41,7 +41,7 @@ public class ClienteService {
             todosClientes = clienteRepository.findAll();
         }
 
-        if (todosClientes.isEmpty()) {
+        if (todosClientes.isEmpty() && (nome != null || id != null || cpf != null)) {
             throw new ClienteException("Nao foi possivel encontrar clientes com o filtro desejado");
         }
 
@@ -58,7 +58,7 @@ public class ClienteService {
 
             return this.salvar(clienteParaSalvar);
         } else {
-            throw new CpfValidationException("CPF já cadastrado");
+            throw new CpfValidationException("CPF ja cadastrado");
         }
     }
 

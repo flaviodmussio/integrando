@@ -52,7 +52,9 @@ public class PacoteTarifasServiceTest {
 
         Optional<PacoteTarifas> resultado = pacoteTarifasService.cadastrar(pacoteTarifasRequestDTO);
 
-        Assertions.assertEquals(resultadoCriado, resultado.get());
+        Assertions.assertEquals(resultadoCriado.getNome(), resultado.get().getNome());
+        Assertions.assertEquals(resultadoCriado.getValorMinimo(), resultado.get().getValorMinimo());
+        Assertions.assertEquals(resultadoCriado.getValorMaximo(), resultado.get().getValorMaximo());
     }
 
     @Test
@@ -77,7 +79,10 @@ public class PacoteTarifasServiceTest {
         Mockito.when(pacoteTarifasRepository.findById(Mockito.any(Long.class)))
                 .thenReturn(Optional.empty());
 
-        PacoteTarifasException exception = Assertions.assertThrows(PacoteTarifasException.class,() -> pacoteTarifasService.encontrar(pacoteTarifasId));
+        PacoteTarifasException exception = Assertions.assertThrows(
+                PacoteTarifasException.class,
+                () -> pacoteTarifasService.encontrar(pacoteTarifasId)
+        );
         Assertions.assertEquals("Nao foi possivel encontrar o pacote de tarifas com id 12", exception.getMessage());
     }
 
@@ -184,7 +189,8 @@ public class PacoteTarifasServiceTest {
                 .comNome("PacoteTarifas Mockado I")
                 .comValorMinimo(new BigDecimal("11.0"))
                 .comValorMaximo(new BigDecimal("150.0"))
-                .criar(getListaClientes());
+                .comClientes(getListaClientes())
+                .criar();
     }
 
     private List<Cliente> getListaClientes() {

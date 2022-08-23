@@ -34,13 +34,6 @@ public class PacoteTarifas {
         this.valorMaximo = valorMaximo;
     }
 
-    public PacoteTarifas(Long id, String nome, BigDecimal valorMinimo, BigDecimal valorMaximo) {
-        this.id = id;
-        this.nome = nome;
-        this.valorMinimo = valorMinimo;
-        this.valorMaximo = valorMaximo;
-    }
-
     public PacoteTarifas(Long id, String nome, BigDecimal valorMinimo, BigDecimal valorMaximo, List<Cliente> clientes) {
         this.id = id;
         this.nome = nome;

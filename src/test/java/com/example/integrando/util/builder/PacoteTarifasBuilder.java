@@ -42,11 +42,13 @@ public class PacoteTarifasBuilder {
         return this;
     }
 
-    public PacoteTarifas criar() {
-        return new PacoteTarifas(id, nome, valorMinimo, valorMaximo);
+    public PacoteTarifasBuilder comClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
+
+        return this;
     }
 
-    public PacoteTarifas criar(List<Cliente> clientes) {
+    public PacoteTarifas criar() {
         return new PacoteTarifas(id, nome, valorMinimo, valorMaximo, clientes);
     }
 

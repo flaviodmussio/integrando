@@ -38,6 +38,10 @@ public class PacoteTarifasService {
             pacoteTarifas = pacoteTarifasRepository.findAll();
         }
 
+        if (pacoteTarifas.isEmpty() && (id != null || clienteId != null || clienteNome != null)){
+            throw new PacoteTarifasException("Nao foi possivel encontrar um pacote tarifas com o filtro desejado");
+        }
+
         return pacoteTarifas;
     }
 
