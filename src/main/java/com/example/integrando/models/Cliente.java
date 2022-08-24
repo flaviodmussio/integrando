@@ -34,6 +34,14 @@ public class Cliente {
         this.dataNascimento = dataNascimento;
     }
 
+    public Cliente(Long id, String nome, String cpf, LocalDate dataNascimento, PacoteTarifas pacoteTarifas) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.pacoteTarifas = pacoteTarifas;
+    }
+
     public Long getId() {
         return id;
     }

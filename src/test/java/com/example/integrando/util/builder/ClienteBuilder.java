@@ -7,6 +7,8 @@ import java.time.LocalDate;
 
 public class ClienteBuilder {
 
+    private Long id;
+
     private String nome;
 
     private String cpf;
@@ -15,6 +17,11 @@ public class ClienteBuilder {
 
     private PacoteTarifas pacoteTarifas;
 
+    public ClienteBuilder comId(Long id) {
+        this.id = id;
+
+        return this;
+    }
 
     public ClienteBuilder comNome(String nome) {
         this.nome = nome;
@@ -41,7 +48,7 @@ public class ClienteBuilder {
     }
 
     public Cliente criar() {
-        return new Cliente(nome, cpf, dataNascimento);
+        return new Cliente(id, nome, cpf, dataNascimento, pacoteTarifas);
     }
 
 }

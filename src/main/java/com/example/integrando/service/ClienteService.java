@@ -98,7 +98,7 @@ public class ClienteService {
         return Optional.of(clienteRepository.save(cliente));
     }
 
-    private PacoteTarifas pegarPacoteTarifas(String pacoteTarifaId) {
+    private PacoteTarifas pegarPacoteTarifas(String pacoteTarifaId) throws PacoteTarifasException {
         Optional<PacoteTarifas> pacoteTarifas = pacoteTarifasRepository.findById(Long.parseLong(pacoteTarifaId));
 
         if (pacoteTarifas.isPresent()) {
