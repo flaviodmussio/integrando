@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/cliente")
+@RequestMapping("/clientes")
 public class ClienteController {
 
     @Autowired
@@ -49,7 +49,7 @@ public class ClienteController {
 
         return cliente
                 .map(clienteSalvo -> {
-                    URI uri = uriComponentsBuilder.path("/cliente/{id}").buildAndExpand(clienteSalvo.getId()).toUri();
+                    URI uri = uriComponentsBuilder.path("/clientes/{id}").buildAndExpand(clienteSalvo.getId()).toUri();
 
                     return ResponseEntity.created(uri).body(new ClienteResponseDTO("cadastrado", new ClienteDTO(clienteSalvo)));
                 })
