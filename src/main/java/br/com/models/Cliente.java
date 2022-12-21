@@ -4,8 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 public class Cliente {
@@ -18,6 +19,9 @@ public class Cliente {
     private String cpf;
     private LocalDate dataNascimento;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private PacoteTarifas pacoteTarifas;
 
     public Cliente() {
     }
@@ -26,6 +30,14 @@ public class Cliente {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
+    }
+
+    public Cliente(Long id, String nome, String cpf, LocalDate dataNascimento, PacoteTarifas pacoteTarifas) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.pacoteTarifas = pacoteTarifas;
     }
 
     public Long getId() {
@@ -58,5 +70,14 @@ public class Cliente {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+
+    public PacoteTarifas getPacoteTarifas() {
+        return pacoteTarifas;
+    }
+
+    public void setPacoteTarifas(PacoteTarifas pacoteTarifas) {
+        this.pacoteTarifas = pacoteTarifas;
     }
 }

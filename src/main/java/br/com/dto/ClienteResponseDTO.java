@@ -1,6 +1,6 @@
 package br.com.dto;
 
-import br.com.*;
+
 import br.com.models.Cliente;
 
 import java.time.LocalDate;
