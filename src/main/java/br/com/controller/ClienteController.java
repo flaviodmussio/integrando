@@ -1,6 +1,6 @@
 package br.com.controller;
 
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.models.Cliente;
 import br.com.service.ClienteService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cliente")

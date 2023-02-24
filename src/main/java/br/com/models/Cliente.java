@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -19,7 +20,8 @@ public class Cliente {
     private String cpf;
     private LocalDate dataNascimento;
 
-    @ManyToOne
+    @NotNull
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private PacoteTarifas pacoteTarifas;
 
