@@ -1,25 +1,25 @@
 package br.com.dto;
 
-
 import br.com.models.Cliente;
 
 import java.time.LocalDate;
 
-public class ClienteResponseDTO {
+public class ClienteDTO {
 
     private Long id;
     private String nome;
     private String cpf;
     private LocalDate dataNascimento;
 
-    public ClienteResponseDTO(Cliente cliente) {
-        this.id = cliente.getId();
-        this.nome = cliente.getNome();
-        this.cpf = cliente.getCpf();
-        this.dataNascimento = cliente.getDataNascimento();
+    public ClienteDTO(Long id, String nome, String cpf, LocalDate dataNascimento) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
     }
 
-    public ClienteResponseDTO(String cadastrado, ClienteDTO clienteDTO) {
+    public ClienteDTO(Cliente clienteEncontrado) {
+
     }
 
     public Long getId() {
