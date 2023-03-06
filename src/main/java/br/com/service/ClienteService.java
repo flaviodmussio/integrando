@@ -1,0 +1,112 @@
+package br.com.service;
+
+import br.com.dto.ClienteRequestDTO;
+import br.com.exceptions.ClienteException;
+import br.com.exceptions.CpfValidationException;
+import br.com.exceptions.PacoteTarifasException;
+import br.com.models.Cliente;
+import br.com.models.PacoteTarifas;
+import br.com.repository.ClienteRepository;
+import br.com.repository.PacoteTarifasRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ClienteService {
+
+	private ClienteRepository clienteRepository;
+
+	private PacoteTarifasRepository pacoteTarifasRepository;
+
+	@Autowired
+	public ClienteService(ClienteRepository clienteRepository, PacoteTarifasRepository pacoteTarifasRepository) {
+		this.clienteRepository = clienteRepository;
+		this.pacoteTarifasRepository = pacoteTarifasRepository;
+	}
+
+	public List<Cliente> listar(String nome, Long id, String cpf) throws ClienteException {
+		List<Cliente> todosClientes = null;
+
+		if (nome != null) {
+			todosClientes = clienteRepository.findAllByNome(nome);
+		} else if (id != null) {
+			todosClientes = clienteRepository.findAllById(Collections.singleton(id));
+		} else if (cpf != null) {
+			todosClientes = clienteRepository.findAllByCpf(cpf);
+		} else {
+			todosClientes = clienteRepository.findAll();
+		}
+
+		if (todosClientes.isEmpty() && (nome != null || id != null || cpf != null)) {
+			throw new ClienteException("Nao foi possivel encontrar clientes com o filtro desejado");
+		}
+
+		return todosClientes;
+	}
+
+	public Optional<Cliente> cadastrar(@Valid ClienteRequestDTO cliente) {
+		Cliente clienteParaSalvar = cliente.toCliente();
+
+		if (clienteRepository.findByCpf(clienteParaSalvar.getCpf()).isEmpty()) {
+			PacoteTarifas pacoteTarifas = pegarPacoteTarifas(cliente.getPacoteTarifasId());
+
+			clienteParaSalvar.setPacoteTarifas(pacoteTarifas);
+
+			return this.salvar(clienteParaSalvar);
+		} else {
+			throw new CpfValidationException("CPF já cadastrado");
+		}
+	}
+
+	public Optional<Cliente> encontrar(Long id) {
+		return clienteRepository.findById(id);
+	}
+
+	public Optional<Cliente> atualizar(Long id, ClienteRequestDTO clienteRequest) throws CpfValidationException, ClienteException {
+		Optional<Cliente> clienteParaAtualizar = clienteRepository.findById(id);
+
+		if (clienteParaAtualizar.isPresent()) {
+			Cliente clienteAntigo = clienteParaAtualizar.get();
+			Cliente clienteAtualizado = clienteRequest.toCliente();
+
+			if (clienteAtualizado.getCpf().equals(clienteAntigo.getCpf())){
+				clienteAtualizado.setId(clienteAntigo.getId());
+				clienteAtualizado.setPacoteTarifas(pegarPacoteTarifas(clienteRequest.getPacoteTarifasId()));
+
+				return this.salvar(clienteAtualizado);
+			} else {
+				throw new CpfValidationException("CPF nao pode ser diferente da previamente cadastrada");
+			}
+		} else {
+			throw new ClienteException("Cliente para atualizar nao encontrado!");
+		}
+	}
+
+	public void remover(Long id) throws ClienteException {
+		if (clienteRepository.findById(id).isPresent()) {
+			clienteRepository.deleteById(id);
+		} else {
+			throw new ClienteException("Nao foi possivel encontrar cliente com id " + id);
+		}
+	}
+
+	private Optional<Cliente> salvar(Cliente cliente) {
+		return Optional.of(clienteRepository.save(cliente));
+	}
+
+	private PacoteTarifas pegarPacoteTarifas(String pacoteTarifaId) throws PacoteTarifasException {
+		Optional<PacoteTarifas> pacoteTarifas = pacoteTarifasRepository.findById(Long.parseLong(pacoteTarifaId));
+
+		if (pacoteTarifas.isPresent()) {
+			return pacoteTarifas.get();
+		} else {
+			throw new PacoteTarifasException("Nao foi possivel encontrar pacote de tarifas com id " + pacoteTarifaId);
+		}
+	}
+
+}
