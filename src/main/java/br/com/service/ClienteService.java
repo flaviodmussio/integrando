@@ -59,7 +59,7 @@ public class ClienteService {
 
 			return this.salvar(clienteParaSalvar);
 		} else {
-			throw new CpfValidationException("CPF ja cadastrado");
+			throw new CpfValidationException("CPF já cadastrado");
 		}
 	}
 
